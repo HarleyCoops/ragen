@@ -220,3 +220,39 @@ We thank [DeepSeek](https://github.com/deepseek-ai/DeepSeek-R1) for providing th
   url          = {https://github.com/ZihanWang314/ragen},
 }
 ```
+
+## Replication
+
+**Phase 1: Understanding the Repository**
+
+*   Explore the file structure: (Completed) I've examined the file structure and identified key directories and files related to model loading, training, data handling, and configuration.
+*   Identify the model loading mechanism: (Completed) The DeepSeek model clone is implemented using Megatron-LM, as confirmed by the files in `verl/models/llama/megatron`.
+*   Understand the training process: (Completed) The repository supports both PPO and SFT, with training scripts located in `verl/trainer`. `main_ppo.py` is used for PPO training, and `fsdp_sft_trainer.py` is used for SFT training.
+*   Analyze the data loading and formatting: (Completed) The `ragen/utils/dataset.py` file defines a custom `Dataset` class for trajectory-based data, and `verl/utils/dataset/sft_dataset.py` defines a class for SFT data. The `transform` method in `ragen/utils/dataset.py` and the `__getitem__` method in `verl/utils/dataset/sft_dataset.py` are used to format the data.
+*   Identify the fine-tuning task: (In Progress) The fine-tuning task depends on the configuration files used with the training scripts. The `cases` directory contains example data for reward hacking and "suck moment" scenarios, which may provide clues about the fine-tuning task.
+
+**Phase 2: Replicating Results Locally**
+
+*   Identify the necessary dependencies: (Completed) The `requirements.txt` file lists the required Python packages.
+*   Set up the environment:
+    *   I will guide the user to create a new virtual environment using `conda` or `venv`.
+    *   I will guide the user to install the required packages using `pip install -r requirements.txt`.
+    *   I will guide the user to ensure that CUDA is properly configured and that PyTorch can access the GPU.
+*   Run the training script:
+    *   I will guide the user to run the PPO training script using `python verl/trainer/main_ppo.py --config-path verl/trainer/config --config-name ppo_trainer`.
+    *   I will guide the user to run the SFT training script using `python verl/trainer/fsdp_sft_trainer.py --config-path verl/trainer/config --config-name sft_trainer`.
+    *   I will guide the user to modify the config files as needed.
+*   Verify the results:
+    *   I will guide the user to monitor the training logs and metrics.
+    *   I will guide the user to compare the results with the original paper or repository.
+
+**Phase 3: Fine-tuning on Custom Tasks**
+
+*   Understand the data format:
+    *   For SFT, the data should be in parquet files with columns for prompts and responses. The `SFTDataset` class in `verl/utils/dataset/sft_dataset.py` provides more details on the expected format.
+    *   For PPO, the data should be in a trajectory format, as handled by the `Dataset` class in `ragen/utils/dataset.py`.
+*   Modify the training script:
+    *   I will guide the user to modify the configuration files to use their own data files.
+    *   I will guide the user to modify the `RewardManager` class in `verl/trainer/main_ppo.py` to use their own reward function.
+*   Run the fine-tuning script:
+    *   I will guide the user to run the modified training script with their own data.
